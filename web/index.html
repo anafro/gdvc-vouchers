@@ -2,16 +2,58 @@
 <html lang="en">
 <head>
     <script type="text/javascript" src="/eel.js"></script>
+    <script src="main.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <link rel="stylesheet" href="styles.css">
-    <title>Title</title>
+    <title>Сертификаты Гаранта</title>
 </head>
-<body>
-    <p>
-        Hello, world!
-    </p>
+<body x-cloak x-data="{certificates: getCertificates(), certificateCreationOpened: false}">
+    <header>
+        <div id="header__logo">
+            <img id="header__logo-image" src="images/logotype.svg" alt="⭐">
+            <h1 id="header__logo-title">
+                Сертификаты<br>
+                Клининга
+            </h1>
+        </div>
+
+        <div id="header__search">
+            <img src="images/search.svg" alt="🔍" id="header__search-icon">
+            <input id="header__search-input" type="search" placeholder="Номер телефона, ФИО или номер сертификата..." />
+        </div>
+
+        <a id="header__add-button">
+            <img src="images/add.svg" alt="+" id="header__add-button-icon">
+        </a>
+    </header>
+
+    <section id="certificates">
+        <template x-for="certificate in certificates">
+            <div class="certificates__card">
+                <div class="certificates__card-header">
+                    <span class="certificates__card-id" x-text="'#' + certificate.id"></span>
+                    <a class="certificates__card-options-button" x-on:click="certificateCreationOpened = true">
+                        <img src="images/options.svg" alt="..." class="certificates__card-options-button-icon">
+                    </a>
+                </div>
+
+                <h2 class="certificates__card-holder" x-text="certificate.holder"></h2>
+                <span class="certificates__card-phone" x-text="certificate.phone"></span>
+                <span class="certificates__card-service" x-text="certificate.service"></span>
+                <span class="certificates__card-value" x-text="certificate.value"></span>
+                <span class="certificates__card-expire-date" x-text="certificate.expire"></span>
+            </div>
+        </template>
+    </section>
+
+    <template x-show="certificateCreationOpened">
+        <section id="certificate-creation">
+            Hello world!
+        </section>
+    </template>
+    <script src="//unpkg.com/alpinejs" defer></script>
 </body>
 </html>
