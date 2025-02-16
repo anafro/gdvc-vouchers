@@ -11,22 +11,22 @@
     <title>Сертификаты Гаранта</title>
 </head>
 <body>
-    <div id="app" x-data="{
-        certificates: getCertificates(),
-        open: true,
-        holder: '',
-        phone: '',
-        service: 'dry-cleaning',
-        open: false
-    }" x-cloak>
+    <div id="app" x-data="app()" x-init="init()" x-cloak>
         <form id="certificate-creation" x-show="open">
             <div id="certificate-creation__header">
                 <h2 id="certificate-creation__title">Создать сертификат</h2>
+                <a id="certificate-creation__close-button" x-on:click="open = false">
+                    <img id="certificate-creation__close-button-icon" src="images/cross.svg" alt="x">
+                </a>
             </div>
 
             <div id="certificate-creation__fields" x-on:submit="void(0)">
+                <h2>Информация о владельце сертификата</h2>
+
                 <input x-model="holder" type="text" id="certificate-creation__holder" placeholder="ФИО держателя сертификата" pattern="(.|\s)*\S(.|\s)*">
                 <input x-model="phone" type="text" id="certificate-creation__phone" placeholder="Его номер телефона" pattern="(^8|7|\+7)((\d{10})|(\s\(\d{3}\)\s\d{3}\s\d{2}\s\d{2}))">
+
+                <h2>Ценность сертификата и услуга возможного применения</h2>
 
                 <div id="certificate-creation__service-set">
                     <div class="certificate-creation__service-container">
@@ -42,7 +42,7 @@
             </div>
 
             <footer id="certificate-creation__footer">
-                <button id="certificate-creation__submit" type="submit" x-on:click.prevent="createCertificate(holder, phone, service); open = false; certificates = getCertificates()">Создать новый сертификат</button>
+                <button id="certificate-creation__submit" type="submit" x-on:click.prevent="await createCertificate(holder, phone, service); open = false; holder = ''; phone = ''; service = 'dry-cleaning'; certificates = await getCertificates()">Создать новый сертификат</button>
             </footer>
         </form>
 
@@ -57,7 +57,7 @@
 
         <div id="header__search">
             <img src="images/search.svg" alt="🔍" id="header__search-icon">
-            <input id="header__search-input" type="search" placeholder="Номер телефона, ФИО или номер сертификата..." />
+            <input id="header__search-input" type="search" placeholder="Номер телефона, ФИО или номер сертификата..." x-model="searchQuery" />
         </div>
 
         <a id="header__add-button">
@@ -66,11 +66,33 @@
     </header>
 
         <section id="certificates">
-            <template x-for="certificate in certificates">
-                <div class="certificates__card">
+            <template x-for="certificate in filteredCertificates">
+                <div class="certificates__card" x-data="{isCertificateOptionsOpen: false}">
                     <div class="certificates__card-header">
+                        <dialog class="certificates__card-options-dialog" x-ref="certificateOptions">
+                            <div class="certificates__card-options-dialog-header">
+                                <h2 class="certificates__card-options-dialog-title">Что Вы хотите сделать?</h2>
+                                <img src="images/cross.svg" alt="x" class="certificates__card-options-dialog-close-button" x-on:click="$refs.certificateOptions.close()">
+                            </div>
+
+                            <div class="certificates__card-options-dialog-option" x-on:click="deleteCertificate(certificate.id); $refs.certificateOptions.close(); certificates = await getCertificates()">
+                                <img src="images/check.svg" alt="✔️">
+                                <span>Использовать сертификат (если клиент пришёл и хочет получить скидку)</span>
+                            </div>
+
+                            <div class="certificates__card-options-dialog-option" x-on:click="deleteCertificate(certificate.id); $refs.certificateOptions.close(); certificates = await getCertificates()">
+                                <img src="images/bin.svg" alt="🗑️">
+                                <span>Удалить сертификат (если кто-то из сотрудников создал этот сертификат случайно)</span>
+                            </div>
+
+                            <div class="certificates__card-options-dialog-option" x-on:click="alert('TODO' /* TODO */)">
+                                <img src="images/copy.svg" alt="📃">
+                                <span>Скопировать картинку сертификата в буфер обмена</span>
+                            </div>
+                        </dialog>
+
                         <span class="certificates__card-id" x-text="'#' + certificate.id"></span>
-                        <a class="certificates__card-options-button">
+                        <a class="certificates__card-options-button" x-on:click="$refs.certificateOptions.showModal()">
                             <img src="images/options.svg" alt="..." class="certificates__card-options-button-icon">
                         </a>
                     </div>
@@ -78,8 +100,12 @@
                     <h2 class="certificates__card-holder" x-text="certificate.holder"></h2>
                     <span class="certificates__card-phone" x-text="certificate.phone"></span>
                     <span class="certificates__card-service" x-text="certificate.service"></span>
-                    <span class="certificates__card-value" x-text="certificate.value"></span>
-                    <span class="certificates__card-expire-date" x-text="certificate.expires"></span>
+                    <span class="certificates__card-value" x-text="`${certificate.value} рублей`"></span>
+                    <span class="certificates__card-expire-date" x-text="'Этим сертификатом можно пользоваться до ' + new Date(certificate.expires).toLocaleDateString('ru-RU', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                    })"></span>
                 </div>
             </template>
         </section>

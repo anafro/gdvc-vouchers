@@ -39,5 +39,9 @@ class Certificate(Model):
                 "value": str(certificate.value),
                 "expires": certificate.expires.strftime("%Y-%m-%d")
             }
-            for certificate in cls.select()
+            for certificate in cls.select().order_by(cls.expires.desc())
         ]
+
+    @classmethod
+    def delete_certificate_by_id(cls, id: int) -> None:
+        cls.delete().where(cls.id == id).execute()

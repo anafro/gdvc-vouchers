@@ -23,6 +23,11 @@ def create_certificate(holder: str, phone: str, service_type: str) -> None:
     Certificate.create_certificate(service, holder, phone, value)
 
 
+@eel.expose
+def delete_certificate(id: int) -> None:
+    Certificate.delete_certificate_by_id(id)
+
+
 def main() -> None:
     initialize_db()
     eel.init('web')
