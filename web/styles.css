@@ -1,4 +1,9 @@
+[x-cloak] {
+    display: none;
+}
+
 :root {
+    --primary-color: #2CDBBA;
     --background-color: #F1F1F1;
     --search-icon-color: #B3B3B3;
     --border-radius: 0.5rem;
@@ -6,8 +11,16 @@
 }
 
 * {
+    margin: 0;
+    padding: 0;
     font-family: "PT Sans", sans-serif;
     box-sizing: border-box;
+    accent-color: var(--primary-color);
+}
+
+#app {
+    position: relative;
+    min-height: 100vh;
 }
 
 header {
@@ -109,4 +122,65 @@ header {
 .certificates__card-service {
     color: #B3B3B3;
     margin-block-end: 2.5rem;
+}
+
+#certificate-creation {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    padding-inline: var(--page-padding);
+}
+
+#certificate-creation__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: 2rem;
+}
+
+#certificate-creation__fields {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    row-gap: 0.5rem;
+    flex: 1;
+}
+
+#certificate-creation__fields > input[type="text"] {
+    all: unset;
+    background-color: var(--background-color);
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    border-radius: var(--border-radius);
+    width: 60ch;
+}
+
+#certificate-creation__fields > input[type="text"]:user-invalid {
+    color: red;
+    outline: 1px solid red;
+}
+
+#certificate-creation__fields > input[type="text"]::placeholder {
+    color: var(--search-icon-color);
+}
+
+#certificate-creation__footer {
+    padding-block: 3rem;
+}
+
+#certificate-creation__submit {
+    all: unset;
+    background-color: var(--primary-color);
+    color: white;
+    padding-inline: var(--page-padding);
+    padding-block: 1rem;
+    font-weight: 1000;
+    border-radius: var(--border-radius);
 }

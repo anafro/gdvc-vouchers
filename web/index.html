@@ -10,8 +10,43 @@
     <link rel="stylesheet" href="styles.css">
     <title>Сертификаты Гаранта</title>
 </head>
-<body x-cloak x-data="{certificates: getCertificates(), certificateCreationOpened: false}">
-    <header>
+<body>
+    <div id="app" x-data="{
+        certificates: getCertificates(),
+        open: true,
+        holder: '',
+        phone: '',
+        service: 'dry-cleaning',
+        open: false
+    }" x-cloak>
+        <form id="certificate-creation" x-show="open">
+            <div id="certificate-creation__header">
+                <h2 id="certificate-creation__title">Создать сертификат</h2>
+            </div>
+
+            <div id="certificate-creation__fields" x-on:submit="void(0)">
+                <input x-model="holder" type="text" id="certificate-creation__holder" placeholder="ФИО держателя сертификата" pattern="(.|\s)*\S(.|\s)*">
+                <input x-model="phone" type="text" id="certificate-creation__phone" placeholder="Его номер телефона" pattern="(^8|7|\+7)((\d{10})|(\s\(\d{3}\)\s\d{3}\s\d{2}\s\d{2}))">
+
+                <div id="certificate-creation__service-set">
+                    <div class="certificate-creation__service-container">
+                        <input x-model="service" type="radio" name="service" class="certificate-creation__service" id="certificate-creation__service-dry-cleaning" value="dry-cleaning" checked>
+                        <label for="certificate-creation__service-dry-cleaning" class="certificate-creation__service-label">Химчистка мягкой мебели и ковров, 500 рублей</label>
+                    </div>
+
+                    <div class="certificate-creation__service-container">
+                        <input x-model="service" type="radio" name="service" class="certificate-creation__service" id="certificate-creation__service-spring-cleaning" value="spring-cleaning" checked>
+                        <label for="certificate-creation__service-spring-cleaning" class="certificate-creation__service-label">Генеральная уборка, 1 000 рублей</label>
+                    </div>
+                 </div>
+            </div>
+
+            <footer id="certificate-creation__footer">
+                <button id="certificate-creation__submit" type="submit" x-on:click.prevent="createCertificate(holder, phone, service); open = false; certificates = getCertificates()">Создать новый сертификат</button>
+            </footer>
+        </form>
+
+        <header>
         <div id="header__logo">
             <img id="header__logo-image" src="images/logotype.svg" alt="⭐">
             <h1 id="header__logo-title">
@@ -26,34 +61,30 @@
         </div>
 
         <a id="header__add-button">
-            <img src="images/add.svg" alt="+" id="header__add-button-icon">
+            <img src="images/add.svg" alt="+" id="header__add-button-icon" x-on:click="open = true">
         </a>
     </header>
 
-    <section id="certificates">
-        <template x-for="certificate in certificates">
-            <div class="certificates__card">
-                <div class="certificates__card-header">
-                    <span class="certificates__card-id" x-text="'#' + certificate.id"></span>
-                    <a class="certificates__card-options-button" x-on:click="certificateCreationOpened = true">
-                        <img src="images/options.svg" alt="..." class="certificates__card-options-button-icon">
-                    </a>
+        <section id="certificates">
+            <template x-for="certificate in certificates">
+                <div class="certificates__card">
+                    <div class="certificates__card-header">
+                        <span class="certificates__card-id" x-text="'#' + certificate.id"></span>
+                        <a class="certificates__card-options-button">
+                            <img src="images/options.svg" alt="..." class="certificates__card-options-button-icon">
+                        </a>
+                    </div>
+
+                    <h2 class="certificates__card-holder" x-text="certificate.holder"></h2>
+                    <span class="certificates__card-phone" x-text="certificate.phone"></span>
+                    <span class="certificates__card-service" x-text="certificate.service"></span>
+                    <span class="certificates__card-value" x-text="certificate.value"></span>
+                    <span class="certificates__card-expire-date" x-text="certificate.expires"></span>
                 </div>
-
-                <h2 class="certificates__card-holder" x-text="certificate.holder"></h2>
-                <span class="certificates__card-phone" x-text="certificate.phone"></span>
-                <span class="certificates__card-service" x-text="certificate.service"></span>
-                <span class="certificates__card-value" x-text="certificate.value"></span>
-                <span class="certificates__card-expire-date" x-text="certificate.expire"></span>
-            </div>
-        </template>
-    </section>
-
-    <template x-show="certificateCreationOpened">
-        <section id="certificate-creation">
-            Hello world!
+            </template>
         </section>
-    </template>
+    </div>
+
     <script src="//unpkg.com/alpinejs" defer></script>
 </body>
 </html>

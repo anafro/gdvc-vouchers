@@ -1,6 +1,8 @@
 import eel
 from screeninfo import get_monitors
 
+from models.certificate import Certificate, initialize_db
+
 
 MONITOR = get_monitors().pop()
 WINDOW_SIZE = (MONITOR.width, MONITOR.height)
@@ -8,26 +10,21 @@ WINDOW_POSITION = (int(MONITOR.width / 2 - WINDOW_SIZE[0] / 2), int(MONITOR.heig
 
 @eel.expose
 def get_certificates() -> list[dict[str, str]]:
-    return [
-        {
-            "id": 123456,
-            "holder": "Иванов Иван Иванович",
-            "phone": "+7 999 888 11 22",
-            "service": "Химчистка ковров",
-            "value": "9 900 рублей",
-            "expire": "20 мая 2025",
-        },
-        {
-            "id": 123456,
-            "holder": "Иванов Иван Иванович",
-            "phone": "+7 999 888 11 22",
-            "service": "Химчистка ковров",
-            "value": "9 930 рублей",
-            "expire": "20 мая 2025",
-        },
-    ]
+    return Certificate.get_all_certificates_as_dictionaries()
+
+
+@eel.expose
+def create_certificate(holder: str, phone: str, service_type: str) -> None:
+    (service, value) = {
+        'dry-cleaning': ("Химчистка мягкой мебели и ковров", 500),
+        'spring-cleaning': ("Генеральная уборка", 1000),
+    }[service_type]
+
+    Certificate.create_certificate(service, holder, phone, value)
+
 
 def main() -> None:
+    initialize_db()
     eel.init('web')
     eel.start('index.html', size=WINDOW_SIZE, position=WINDOW_POSITION)
 
