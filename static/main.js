@@ -1,7 +1,5 @@
-window.addEventListener("beforeunload", () => { eel.close_python()} )
-
 function app() {
-    return {
+    return exposeGlobally({
         certificates: [],
         searchQuery: '',
         holder: '',
@@ -32,34 +30,47 @@ function app() {
                 );
             });
         }
-    };
+    }, 'app');
 }
 
 async function getCertificates() {
-    if (typeof window["eel"] === "undefined") {
-        console.error("%cThe EEL is not defined. Don't run the script in the browser!", "font-size: 1.5rem; font-weight: 1000;");
-        return [];
+    const response = await fetch('/api/v1/get_certificates');
+    if (response.ok) {
+        return await response.json();
+    } else {
+        console.error('Failed to fetch certificates:', response.statusText);
     }
-
-    return await eel["get_certificates"]()();
 }
 
 async function createCertificate(holder, phone, service) {
-    if (typeof window["eel"] === "undefined") {
-        console.error("%cThe EEL is not defined. Don't run the script in the browser!", "font-size: 1.5rem; font-weight: 1000;");
-        return;
-    }
+    console.log({holder, phone, service});
 
-    await eel["create_certificate"](holder, phone, service)();
+    const response = await fetch('/api/v1/create_certificate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            holder: holder,
+            phone: phone,
+            service_type: service,
+        }),
+    });
+
+    const responseBody = await response.json();  // This will capture the detailed error message
+
+    if (response.ok) {
+        console.log("Certificate created successfully!");
+    } else {
+        console.error("Failed to create certificate:", response.statusText);
+        console.error("Response details:", responseBody);  // Logs the error message from FastAPI
+    }
 }
 
 async function deleteCertificate(id) {
-    if (typeof window["eel"] === "undefined") {
-        console.error("%cThe EEL is not defined. Don't run the script in the browser!", "font-size: 1.5rem; font-weight: 1000;");
-        return;
-    }
-
-    await eel["delete_certificate"](parseInt(id))();
+    await fetch(`/api/v1/delete_certificate?id=${id}`, {
+        method: 'DELETE'
+    });
 }
 
 async function loadFonts() {
@@ -75,7 +86,7 @@ async function loadFonts() {
     ];
 
     const fontPromises = fonts.map(font => {
-        const fontFace = new FontFace(font.name, `url(/fonts/${font.filename})`);
+        const fontFace = new FontFace(font.name, `url(/static/fonts/${font.filename})`);
         document.fonts.add(fontFace);
         return fontFace.load();
     });
@@ -98,7 +109,7 @@ async function generateCertificateImage(certificate) {
 
     try {
         await loadFonts();
-        const template = await loadImage('images/certificate.png');
+        const template = await loadImage('/static/images/certificate.png');
 
         // Check if image loaded correctly
         if (!template.width || !template.height) {
@@ -148,4 +159,17 @@ async function generateCertificateImage(certificate) {
     } catch (error) {
         console.error("Error generating certificate image:", error);
     }
+}
+
+function exposeGlobally(object, variableName) {
+    window[variableName] = object;
+    return object;
+}
+
+async function isTokenCorrect(token) {
+    const response = await fetch('/api/v1/first_access?token=' + token, {
+        method: 'GET',
+    });
+
+    return response.ok;
 }

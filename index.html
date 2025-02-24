@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script type="text/javascript" src="/eel.js"></script>
-    <script src="main.js"></script>
+    <script src="/static/main.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="static/styles.css">
     <title>Сертификаты Гаранта</title>
 </head>
 <body>
@@ -16,7 +15,7 @@
             <div id="certificate-creation__header">
                 <h2 id="certificate-creation__title">Создать сертификат</h2>
                 <a id="certificate-creation__close-button" x-on:click="open = false">
-                    <img id="certificate-creation__close-button-icon" src="images/cross.svg" alt="x">
+                    <img id="certificate-creation__close-button-icon" src="static/images/cross.svg" alt="x">
                 </a>
             </div>
 
@@ -48,7 +47,7 @@
 
         <header>
         <div id="header__logo">
-            <img id="header__logo-image" src="images/logotype.svg" alt="⭐">
+            <img id="header__logo-image" src="static/images/logotype.svg" alt="⭐">
             <h1 id="header__logo-title">
                 Сертификаты<br>
                 Клининга
@@ -56,12 +55,12 @@
         </div>
 
         <div id="header__search">
-            <img src="images/search.svg" alt="🔍" id="header__search-icon">
+            <img src="static/images/search.svg" alt="🔍" id="header__search-icon">
             <input id="header__search-input" type="search" placeholder="Номер телефона, ФИО или номер сертификата..." x-model="searchQuery" />
         </div>
 
         <a id="header__add-button">
-            <img src="images/add.svg" alt="+" id="header__add-button-icon" x-on:click="open = true">
+            <img src="static/images/add.svg" alt="+" id="header__add-button-icon" x-on:click="open = true">
         </a>
     </header>
 
@@ -72,25 +71,25 @@
                         <dialog class="certificates__card-options-dialog" x-ref="certificateOptions">
                             <div class="certificates__card-options-dialog-header">
                                 <h2 class="certificates__card-options-dialog-title">Что Вы хотите сделать?</h2>
-                                <img src="images/cross.svg" alt="x" class="certificates__card-options-dialog-close-button" x-on:click="$refs.certificateOptions.close()">
+                                <img src="static/images/cross.svg" alt="x" class="certificates__card-options-dialog-close-button" x-on:click="$refs.certificateOptions.close()">
                             </div>
 
                             <img class="certificates__card-option-certificate" :id="`certificates__card-options-certificate-${certificate.id}`">
 
                             <div class="certificates__card-options-dialog-option" x-on:click="deleteCertificate(certificate.id); $refs.certificateOptions.close(); certificates = await getCertificates()">
-                                <img src="images/check.svg" alt="✔️">
+                                <img src="static/images/check.svg" alt="✔️">
                                 <span>Использовать сертификат и удалить (если клиент пришёл и хочет получить скидку)</span>
                             </div>
 
                             <div class="certificates__card-options-dialog-option" x-on:click="deleteCertificate(certificate.id); $refs.certificateOptions.close(); certificates = await getCertificates()">
-                                <img src="images/bin.svg" alt="🗑️">
+                                <img src="static/images/bin.svg" alt="🗑️">
                                 <span>Удалить сертификат (если кто-то из сотрудников создал этот сертификат случайно)</span>
                             </div>
                         </dialog>
 
                         <span class="certificates__card-id" x-text="'#' + certificate.id"></span>
                         <a class="certificates__card-options-button" x-on:click="$refs.certificateOptions.showModal()">
-                            <img src="images/options.svg" alt="..." class="certificates__card-options-button-icon">
+                            <img src="static/images/options.svg" alt="..." class="certificates__card-options-button-icon">
                         </a>
                     </div>
 

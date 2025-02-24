@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="/static/auth.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="static/styles.css">
+    <title>Сертификаты Клининга - Вход</title>
+</head>
+<body>
+    <div id="app" x-data="{token: ''}" x-cloak>
+        <form id="certificate-creation">
+            <div id="certificate-creation__header">
+                <h2 id="certificate-creation__title">Вход</h2>
+                <a id="certificate-creation__close-button"></a>
+            </div>
+
+            <div id="certificate-creation__fields" x-on:submit="void(0)">
+                <h2>Введите пароль</h2>
+
+                <input x-model="token" type="password" id="certificate-creation__holder" placeholder="Введите пароль в это поле...">
+            </div>
+
+            <footer id="certificate-creation__footer">
+                <button id="certificate-creation__submit" type="submit" x-on:click.prevent="storeTokenAndReload(token)">Войти</button>
+            </footer>
+        </form>
+    </div>
+
+    <script src="//unpkg.com/alpinejs" defer></script>
+</body>
+</html>

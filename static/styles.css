@@ -183,7 +183,7 @@ header {
     margin-block-start: 2rem;
 }
 
-#certificate-creation__fields > input[type="text"] {
+#certificate-creation__fields > input[type="text"], input[type="password"] {
     all: unset;
     background-color: var(--background-color);
     padding: 1rem;
@@ -198,7 +198,7 @@ header {
     outline: 1px solid red;
 }
 
-#certificate-creation__fields > input[type="text"]::placeholder {
+#certificate-creation__fields > input[type="text"]::placeholder, input[type="password"]::placeholder {
     color: var(--search-icon-color);
 }
 
