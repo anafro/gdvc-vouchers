@@ -67,7 +67,7 @@
 
         <section id="certificates">
             <template x-for="certificate in filteredCertificates">
-                <div class="certificates__card" x-data="{isCertificateOptionsOpen: false}">
+                <div class="certificates__card" x-init="await generateCertificateImage(certificate)" x-data="{isCertificateOptionsOpen: false}">
                     <div class="certificates__card-header">
                         <dialog class="certificates__card-options-dialog" x-ref="certificateOptions">
                             <div class="certificates__card-options-dialog-header">
@@ -75,19 +75,16 @@
                                 <img src="images/cross.svg" alt="x" class="certificates__card-options-dialog-close-button" x-on:click="$refs.certificateOptions.close()">
                             </div>
 
+                            <img class="certificates__card-option-certificate" :id="`certificates__card-options-certificate-${certificate.id}`">
+
                             <div class="certificates__card-options-dialog-option" x-on:click="deleteCertificate(certificate.id); $refs.certificateOptions.close(); certificates = await getCertificates()">
                                 <img src="images/check.svg" alt="✔️">
-                                <span>Использовать сертификат (если клиент пришёл и хочет получить скидку)</span>
+                                <span>Использовать сертификат и удалить (если клиент пришёл и хочет получить скидку)</span>
                             </div>
 
                             <div class="certificates__card-options-dialog-option" x-on:click="deleteCertificate(certificate.id); $refs.certificateOptions.close(); certificates = await getCertificates()">
                                 <img src="images/bin.svg" alt="🗑️">
                                 <span>Удалить сертификат (если кто-то из сотрудников создал этот сертификат случайно)</span>
-                            </div>
-
-                            <div class="certificates__card-options-dialog-option" x-on:click="alert('TODO' /* TODO */)">
-                                <img src="images/copy.svg" alt="📃">
-                                <span>Скопировать картинку сертификата в буфер обмена</span>
                             </div>
                         </dialog>
 
