@@ -87,7 +87,6 @@ async def delete_certificate(id: int) -> None:
 
 @app.get("/api/v1/protected_resource")
 async def protected_resource(request: Request):
-    # Get the token from the cookie
     token_from_cookie = request.cookies.get(TOKEN_COOKIE_NAME)
 
     if not token_from_cookie:
@@ -102,10 +101,8 @@ async def protected_resource(request: Request):
 
 @app.get("/api/v1/first_access")
 async def first_access(response: Response, token: str):
-    # Check if the provided token is valid
     if token != VALID_TOKEN:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid token. Access denied.")
 
-    # Store token in cookie for future requests (persistent cookie)
     response.set_cookie(TOKEN_COOKIE_NAME, VALID_TOKEN, max_age=31536000, expires=31536000)
     return JSONResponse(content={"message": "Token is correct! Access granted and cookie has been set."})
