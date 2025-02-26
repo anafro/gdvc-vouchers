@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from peewee import AutoField, CharField, IntegerField, DateField, Model, SqliteDatabase
+from peewee import AutoField, CharField, IntegerField, DateField, Model, SqliteDatabase, SQL
 
 db = SqliteDatabase('vouchers.db')
 
@@ -10,7 +10,7 @@ def initialize_db() -> None:
 
 
 class Certificate(Model):
-    id = AutoField(primary_key=True)
+    id = AutoField(primary_key=True, constraints=[SQL('AUTOINCREMENT')])
     service = CharField()
     holder = CharField()
     phone = CharField()
