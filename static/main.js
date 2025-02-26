@@ -150,7 +150,7 @@ async function generateCertificateImage(certificate) {
 
         context.fillStyle = '#B3B3B3';
         context.font = `bold 24px Montserrat`;
-        context.fillText(`Владелец: ${certificate.holder}`, 978, 960);
+        context.fillText(`Владелец: ${certificate.holder}, ${certificate.phone}`, 978, 960);
 
         const image = document.getElementById(`certificates__card-options-certificate-${certificate.id}`);
         const base64 = canvas.toDataURL("image/png");

@@ -65,7 +65,7 @@
     </header>
 
         <section id="certificates">
-            <template x-for="certificate in filteredCertificates">
+            <template x-for="certificate in filteredCertificates" :key="certificate.id">
                 <div class="certificates__card" x-init="await generateCertificateImage(certificate)" x-data="{isCertificateOptionsOpen: false}">
                     <div class="certificates__card-header">
                         <dialog class="certificates__card-options-dialog" x-ref="certificateOptions">
