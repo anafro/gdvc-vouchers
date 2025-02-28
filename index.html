@@ -37,6 +37,21 @@
                         <input x-model="service" type="radio" name="service" class="certificate-creation__service" id="certificate-creation__service-spring-cleaning" value="spring-cleaning" checked>
                         <label for="certificate-creation__service-spring-cleaning" class="certificate-creation__service-label">Генеральная уборка, 1 000 рублей</label>
                     </div>
+
+                    <div class="certificate-creation__service-container">
+                        <input x-model="service" type="radio" name="service" class="certificate-creation__service" id="certificate-creation__service-spring-cleaning-1500" value="spring-cleaning-1500" checked>
+                        <label for="certificate-creation__service-spring-cleaning-1500" class="certificate-creation__service-label">Генеральная уборка, 1 500 рублей</label>
+                    </div>
+
+                    <div class="certificate-creation__service-container">
+                        <input x-model="service" type="radio" name="service" class="certificate-creation__service" id="certificate-creation__service-spring-cleaning-2000" value="spring-cleaning-2000" checked>
+                        <label for="certificate-creation__service-spring-cleaning-2000" class="certificate-creation__service-label">Генеральная уборка, 2 000 рублей</label>
+                    </div>
+
+                    <div class="certificate-creation__service-container">
+                        <input x-model="service" type="radio" name="service" class="certificate-creation__service" id="certificate-creation__service-dry-cleaning-50-percents" value="dry-cleaning-50%" checked>
+                        <label for="certificate-creation__service-dry-cleaning-50-percents" class="certificate-creation__service-label">Химчистка мягкой мебели, -50%</label>
+                    </div>
                  </div>
             </div>
 
@@ -96,7 +111,7 @@
                     <h2 class="certificates__card-holder" x-text="certificate.holder"></h2>
                     <span class="certificates__card-phone" x-text="certificate.phone"></span>
                     <span class="certificates__card-service" x-text="certificate.service"></span>
-                    <span class="certificates__card-value" x-text="`${certificate.value} рублей`"></span>
+                    <span class="certificates__card-value" x-text="certificate.is_percents ? `-${certificate.value}% скидка` : `${certificate.value} рублей`"></span>
                     <span class="certificates__card-expire-date" x-text="'Этим сертификатом можно пользоваться до ' + new Date(certificate.expires).toLocaleDateString('ru-RU', {
                         day: 'numeric',
                         month: 'long',

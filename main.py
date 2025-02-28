@@ -57,7 +57,7 @@ def get_auth() -> FileResponse:
     return FileResponse(os.path.join('auth.html'))
 
 
-@app.get('/api/v1/get_certificates')
+@app.get('/api/v1/get_certificates', response_model=list[dict])
 def get_certificates() -> list[dict[str, str]]:
     return Certificate.get_all_certificates_as_dictionaries()
 
@@ -72,12 +72,15 @@ class CreateCertificateRequest(BaseModel):
 async def create_certificate(request: CreateCertificateRequest) -> None:
     holder, phone, service_type = request.holder, request.phone, request.service_type
 
-    (service, value) = {
-        'dry-cleaning': ("Химчистка мягкой мебели и ковров", 500),
-        'spring-cleaning': ("Генеральная уборка", 1000),
+    (service, value, is_percents) = {
+        'dry-cleaning': ("Химчистка мягкой мебели и ковров", 500, False),
+        'spring-cleaning': ("Генеральная уборка", 1000, False),
+        'spring-cleaning-1500': ("Генеральная уборка", 1500, False),
+        'spring-cleaning-2000': ("Генеральная уборка", 2000, False),
+        'dry-cleaning-50%': ("Химчистка мягкой мебели", 50, True),
     }[service_type]
 
-    Certificate.create_certificate(service, holder, phone, value)
+    Certificate.create_certificate(service, holder, phone, value, is_percents)
 
 
 @app.delete('/api/v1/delete_certificate', status_code=status.HTTP_204_NO_CONTENT)

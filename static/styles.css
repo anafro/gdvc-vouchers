@@ -166,6 +166,21 @@ header {
     width: 2rem;
 }
 
+#certificate-creation__service-set {
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5rem;
+}
+
+.certificate-creation__service-container > * {
+    cursor: pointer;
+    transition: 150ms ease-in-out;
+}
+
+.certificate-creation__service-container:hover {
+    opacity: 0.8;
+}
+
 #certificate-creation__fields {
     display: flex;
     flex-direction: column;

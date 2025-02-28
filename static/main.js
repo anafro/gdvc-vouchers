@@ -119,6 +119,8 @@ async function generateCertificateImage(certificate) {
 
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
+        const isPercentageOff = certificate.service.startsWith('%')
+        const certificateService = certificate.service.replaceAll('%', '');
         canvas.width = template.width;
         canvas.height = template.height;
 
@@ -130,11 +132,11 @@ async function generateCertificateImage(certificate) {
 
         context.fillStyle = cyan;
         context.font = `280px Zvezda`;
-        context.fillText(certificate.value, 978, 526);
+        context.fillText(certificate.is_percents ? certificate.value + '%' : certificate.value, 978, 526);
 
         context.fillStyle = cyan;
         context.font = `84px Zvezda`;
-        context.fillText('рублей', 978, 623);
+        context.fillText(certificate.is_percents ? 'скидка' : 'рублей', 978, 623);
 
         context.fillStyle = cyan;
         context.font = `bold 48px Montserrat`;
@@ -153,9 +155,8 @@ async function generateCertificateImage(certificate) {
         context.fillText(`Владелец: ${certificate.holder}, ${certificate.phone}`, 978, 960);
 
         const image = document.getElementById(`certificates__card-options-certificate-${certificate.id}`);
-        const base64 = canvas.toDataURL("image/png");
 
-        image.src = base64;
+        image.src = canvas.toDataURL("image/png");
     } catch (error) {
         console.error("Error generating certificate image:", error);
     }

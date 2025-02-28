@@ -1,8 +1,9 @@
 from datetime import datetime, timedelta
 
-from peewee import AutoField, CharField, IntegerField, DateField, Model, SqliteDatabase, SQL
+from peewee import AutoField, CharField, IntegerField, DateField, Model, SqliteDatabase, SQL, BooleanField
 
-db = SqliteDatabase('vouchers.db')
+db = SqliteDatabase('certificates.db')
+
 
 def initialize_db() -> None:
     db.connect()
@@ -16,14 +17,15 @@ class Certificate(Model):
     phone = CharField()
     value = IntegerField()
     expires = DateField()
+    is_percents = BooleanField(default=False)
 
     class Meta:
         database = db
 
     @classmethod
-    def create_certificate(cls, service, holder, phone, value):
+    def create_certificate(cls, service: str, holder: str, phone: str, value: int, is_percents: bool):
         expires = datetime.now() + timedelta(days=60)
-        certificate = cls.create(service=service, holder=holder, phone=phone, value=value, expires=expires)
+        certificate = cls.create(service=service, holder=holder, phone=phone, value=value, expires=expires, is_percents=is_percents)
         certificate.save()
 
         return certificate
@@ -37,7 +39,8 @@ class Certificate(Model):
                 "holder": certificate.holder,
                 "phone": certificate.phone,
                 "value": str(certificate.value),
-                "expires": certificate.expires.strftime("%Y-%m-%d")
+                "expires": certificate.expires.strftime("%Y-%m-%d"),
+                "is_percents": certificate.is_percents,
             }
             for certificate in cls.select().order_by(cls.expires.desc())
         ]
