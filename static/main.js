@@ -144,11 +144,11 @@ async function generateCertificateImage(certificate) {
 
         context.fillStyle = black;
         context.font = `bold 24px Montserrat`;
-        context.fillText(`Этот сертификат действителен до ${new Date(certificate.expires).toLocaleDateString('ru-RU', {
+        context.fillText(`Сертификат действителен до ${new Date(certificate.expires).toLocaleDateString('ru-RU', {
             day: 'numeric',
             month: 'long',
             year: 'numeric'
-        })}. Поторопитесь!`, 978, 891);
+        })}`, 978, 891);
 
         context.fillStyle = '#B3B3B3';
         context.font = `bold 24px Montserrat`;
