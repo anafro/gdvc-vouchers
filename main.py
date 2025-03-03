@@ -1,16 +1,11 @@
-from dataclasses import dataclass
-import sys
-
-from dotenv import load_dotenv, find_dotenv
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, status, Request, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse, RedirectResponse
-import eel
 import os
 
 from pydantic import BaseModel
 from starlette.responses import FileResponse
-from starlette.status import HTTP_201_CREATED
 from typing_extensions import Callable
 
 from models.certificate import Certificate, initialize_db
